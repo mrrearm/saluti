@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ciao Rosaria! 🐛</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            text-align: center;
+            color: white;
+            position: relative;
+            z-index: 10;
+            padding-top: 2rem;
+        }
+
+        .greeting {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        .name {
+            font-size: 4rem;
+            color: #FFD700;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+            margin-bottom: 2rem;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        .message {
+            font-size: 1.5rem;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+        }
+
+        /* Insetto carino */
+        .bug-container {
+            position: relative;
+            margin-top: 8rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bug {
+            width: 120px;
+            height: 80px;
+            animation: float 3s ease-in-out infinite;
+            z-index: 5;
+        }
+
+        .bug-body {
+            width: 60px;
+            height: 80px;
+            background: linear-gradient(145deg, #2c2c2c, #000000);
+            border-radius: 50%;
+            position: relative;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .bug-head {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(145deg, #333, #111);
+            border-radius: 50%;
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .eye {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            top: 12px;
+            animation: blink 3s ease-in-out infinite;
+        }
+
+        .eye.left {
+            left: 8px;
+        }
+
+        .eye.right {
+            right: 8px;
+        }
+
+        .eye::before {
+            content: '♥';
+            color: #ff69b4;
+            font-size: 12px;
+            position: absolute;
+            top: -2px;
+            left: 0;
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+
+        .antenna {
+            position: absolute;
+            width: 2px;
+            height: 15px;
+            background: #333;
+            top: -10px;
+            border-radius: 2px;
+        }
+
+        .antenna.left {
+            left: 12px;
+            transform: rotate(-15deg);
+        }
+
+        .antenna.right {
+            right: 12px;
+            transform: rotate(15deg);
+        }
+
+        .antenna::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #ff69b4;
+            border-radius: 50%;
+            top: -2px;
+            left: -1px;
+        }
+
+        .wing {
+            position: absolute;
+            width: 25px;
+            height: 35px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            top: 10px;
+            animation: flutter 0.5s ease-in-out infinite alternate;
+        }
+
+        .wing.left {
+            left: -15px;
+            transform-origin: right center;
+        }
+
+        .wing.right {
+            right: -15px;
+            transform-origin: left center;
+        }
+
+        .spots {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #444;
+            border-radius: 50%;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .spots::before,
+        .spots::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #444;
+            border-radius: 50%;
+        }
+
+        .spots::before {
+            top: 15px;
+            left: -8px;
+        }
+
+        /* Nuvoletta del saluto */
+        .speech-bubble {
+            position: absolute;
+            right: -180px;
+            top: -50px;
+            background: white;
+            color: #333;
+            padding: 15px 20px;
+            border-radius: 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            animation: bubbleFloat 2s ease-in-out infinite;
+            min-width: 200px;
+            text-align: center;
+            z-index: 15;
+        }
+
+        .speech-bubble::before {
+            content: '';
+            position: absolute;
+            left: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-top: 15px solid transparent;
+            border-bottom: 15px solid transparent;
+            border-right: 15px solid white;
+        }
+
+        /* Frasi carine sotto l'insetto */
+        .cute-messages {
+            margin-top: 3rem;
+            text-align: center;
+            color: white;
+        }
+
+        .cute-message {
+            font-size: 1.3rem;
+            margin: 1rem 0;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out forwards;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .cute-message:nth-child(1) { animation-delay: 0.5s; }
+        .cute-message:nth-child(2) { animation-delay: 1s; }
+        .cute-message:nth-child(3) { animation-delay: 1.5s; }
+        .cute-message:nth-child(4) { animation-delay: 2s; }
+        .cute-message:nth-child(5) { animation-delay: 2.5s; }
+        .cute-message:nth-child(6) { animation-delay: 3s; }
+
+        /* Particelle magiche */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #FFD700;
+            border-radius: 50%;
+            animation: sparkle 2s linear infinite;
+        }
+
+        .particle:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
+        .particle:nth-child(2) { top: 30%; right: 15%; animation-delay: 0.5s; }
+        .particle:nth-child(3) { bottom: 25%; left: 20%; animation-delay: 1s; }
+        .particle:nth-child(4) { bottom: 35%; right: 25%; animation-delay: 1.5s; }
+        .particle:nth-child(5) { top: 40%; left: 80%; animation-delay: 0.3s; }
+        .particle:nth-child(6) { bottom: 50%; right: 70%; animation-delay: 0.8s; }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        @keyframes glow {
+            from { text-shadow: 3px 3px 6px rgba(0,0,0,0.5), 0 0 20px #FFD700; }
+            to { text-shadow: 3px 3px 6px rgba(0,0,0,0.5), 0 0 30px #FFD700, 0 0 40px #FFD700; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes bubbleFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Piccoli scarafaggi */
+        .mini-bug {
+            position: absolute;
+            width: 20px;
+            height: 15px;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 20;
+        }
+
+        .mini-bug-body {
+            width: 12px;
+            height: 15px;
+            background: linear-gradient(145deg, #1a1a1a, #000000);
+            border-radius: 50%;
+            position: relative;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+        }
+
+        .mini-bug-head {
+            width: 8px;
+            height: 8px;
+            background: linear-gradient(145deg, #2a2a2a, #111);
+            border-radius: 50%;
+            position: absolute;
+            top: -3px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .mini-bug .mini-eye {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #ff69b4;
+            border-radius: 50%;
+            top: 2px;
+        }
+
+        .mini-bug .mini-eye.left { left: 1px; }
+        .mini-bug .mini-eye.right { right: 1px; }
+
+        .mini-bug-antenna {
+            position: absolute;
+            width: 1px;
+            height: 4px;
+            background: #333;
+            top: -2px;
+            border-radius: 1px;
+        }
+
+        .mini-bug-antenna.left {
+            left: 2px;
+            transform: rotate(-10deg);
+        }
+
+        .mini-bug-antenna.right {
+            right: 2px;
+            transform: rotate(10deg);
+        }
+
+        @keyframes scatterBugs {
+            0% {
+                opacity: 1;
+                transform: scale(0) translateY(0px);
+            }
+            10% {
+                transform: scale(1) translateY(0px);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(1) translateY(-10px);
+            }
+        }
+
+        .mini-bug.floating {
+            animation: floatAway 3s ease-out forwards, miniFloat 1s ease-in-out infinite;
+        }
+
+        @keyframes floatAway {
+            0% {
+                opacity: 1;
+                transform: scale(0);
+            }
+            10% {
+                transform: scale(1);
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes miniFloat {
+            0%, 100% { 
+                transform: translateY(0px) rotate(0deg); 
+            }
+            33% { 
+                transform: translateY(-8px) rotate(5deg); 
+            }
+            66% { 
+                transform: translateY(-4px) rotate(-3deg); 
+            }
+        }
+
+        @keyframes flutter {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(20deg); }
+        }
+
+        @keyframes blink {
+            0%, 90%, 100% { opacity: 1; }
+            95% { opacity: 0.3; }
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        @keyframes sparkle {
+            0% {
+                transform: translateY(0px) scale(0);
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(-100px) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-200px) scale(0);
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .speech-bubble {
+                right: -160px;
+                font-size: 1.1rem;
+                min-width: 180px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .greeting { font-size: 2rem; }
+            .name { font-size: 3rem; }
+            .message { 
+                font-size: 1.2rem; 
+                padding: 0 20px;
+            }
+            .bug { 
+                width: 100px; 
+                height: 70px; 
+            }
+            .speech-bubble {
+                right: -130px;
+                top: -40px;
+                font-size: 0.9rem;
+                min-width: 120px;
+                padding: 10px 12px;
+            }
+            .cute-message { 
+                font-size: 1.1rem;
+                padding: 0 10px;
+                margin: 0.8rem 0;
+            }
+            .container {
+                padding-top: 1rem;
+            }
+            .bug-container {
+                margin-top: 6rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .greeting { font-size: 1.8rem; }
+            .name { font-size: 2.5rem; }
+            .message { 
+                font-size: 1rem;
+                padding: 0 15px;
+            }
+            .bug { 
+                width: 80px; 
+                height: 60px; 
+            }
+            .speech-bubble {
+                right: -110px;
+                top: -35px;
+                font-size: 0.8rem;
+                min-width: 100px;
+                padding: 8px 10px;
+            }
+            .cute-message { 
+                font-size: 1rem;
+                padding: 0 5px;
+                margin: 0.6rem 0;
+            }
+            .bug-container {
+                margin-top: 4rem;
+            }
+        }
+
+        @media (max-width: 320px) {
+            .greeting { font-size: 1.5rem; }
+            .name { font-size: 2rem; }
+            .message { 
+                font-size: 0.9rem;
+                padding: 0 10px;
+            }
+            .speech-bubble {
+                right: -90px;
+                top: -30px;
+                font-size: 0.7rem;
+                min-width: 90px;
+                padding: 6px 8px;
+            }
+            .cute-message { 
+                font-size: 0.9rem;
+                margin: 0.5rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="greeting">Ciao</div>
+        <div class="name">Rosaria!</div>
+        <div class="message">Un piccolo insetto carino ti manda i suoi saluti! 🌟</div>
+    </div>
+
+    <!-- Insetto carino con nuvoletta -->
+    <div class="bug-container">
+        <div class="bug">
+            <div class="speech-bubble" id="timeGreeting">
+                Buongiorno Rosaria! 🌅
+            </div>
+            <div class="bug-body">
+                <div class="bug-head">
+                    <div class="eye left"></div>
+                    <div class="eye right"></div>
+                    <div class="antenna left"></div>
+                    <div class="antenna right"></div>
+                </div>
+                <div class="wing left"></div>
+                <div class="wing right"></div>
+                <div class="spots"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Frasi carine -->
+    <div class="cute-messages">
+        <div class="cute-message">💖 Ti adoro da anni sono il tuo caccaviello di San Giovanni 💖</div>
+        <div class="cute-message">🌬️ Quando non sento la tua aria mi manca l'aria Rosaria, sono l'insetto della malaria arrivo fresco fresco come l'aviaria 🦠</div>
+        <div class="cute-message">🥾 Ho freddo a stare fuori, voglio entrare al caldo nei tuoi scarponi 🥾</div>
+        <div class="cute-message">🧀 Ti adoro come una giovane marmotta, non solo perché sei una bella picciotta, ma perché mi ricordi anche la caciotta 🧀</div>
+        <div class="cute-message">🚌 Ti voglio un bene immenso, ma mi piacerebbe salire di più sopra al mezzo 🚌</div>
+        <div class="cute-message">☕ Come disse Edo sei dolce come il caffè Toledo ☕</div>
+    </div>
+
+    <!-- Particelle magiche -->
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+
+    <script>
+        // Funzione per determinare il saluto in base all'orario
+        function getTimeGreeting() {
+            const now = new Date();
+            const hour = now.getHours();
+            
+            if (hour >= 5 && hour < 12) {
+                return "Buongiorno Rosaria! 🌅";
+            } else if (hour >= 12 && hour < 17) {
+                return "Buon pomeriggio Rosaria! ☀️";
+            } else if (hour >= 17 && hour < 21) {
+                return "Buonasera Rosaria! 🌅";
+            } else {
+                return "Buonanotte Rosaria! 🌙";
+            }
+        }
+
+        // Imposta il saluto corretto
+        document.getElementById('timeGreeting').textContent = getTimeGreeting();
+
+        // Funzione per creare piccoli scarafaggi
+        function createMiniBugs() {
+            const bugContainer = document.querySelector('.bug-container');
+            const bug = document.querySelector('.bug');
+            const bugRect = bug.getBoundingClientRect();
+            const containerRect = bugContainer.getBoundingClientRect();
+            
+            // Crea 12 piccoli scarafaggi
+            for (let i = 0; i < 12; i++) {
+                const miniBug = document.createElement('div');
+                miniBug.className = 'mini-bug floating';
+                
+                miniBug.innerHTML = `
+                    <div class="mini-bug-body">
+                        <div class="mini-bug-head">
+                            <div class="mini-eye left"></div>
+                            <div class="mini-eye right"></div>
+                            <div class="mini-bug-antenna left"></div>
+                            <div class="mini-bug-antenna right"></div>
+                        </div>
+                    </div>
+                `;
+                
+                // Posizione iniziale al centro dell'insetto
+                const centerX = bugRect.left - containerRect.left + bugRect.width / 2;
+                const centerY = bugRect.top - containerRect.top + bugRect.height / 2;
+                
+                // Calcola posizione finale casuale
+                const angle = (Math.PI * 2 * i) / 12 + Math.random() * 0.3;
+                const distance = 80 + Math.random() * 120;
+                const endX = centerX + Math.cos(angle) * distance;
+                const endY = centerY + Math.sin(angle) * distance;
+                
+                // Imposta posizione iniziale
+                miniBug.style.left = centerX + 'px';
+                miniBug.style.top = centerY + 'px';
+                
+                bugContainer.appendChild(miniBug);
+                
+                // Animazione di movimento con delay casuale
+                const delay = Math.random() * 200;
+                setTimeout(() => {
+                    miniBug.style.transition = 'all 2.5s ease-out';
+                    miniBug.style.left = endX + 'px';
+                    miniBug.style.top = endY + 'px';
+                    
+                    // Aggiungi rotazione casuale
+                    const rotation = Math.random() * 360;
+                    miniBug.style.transform = `rotate(${rotation}deg)`;
+                }, delay);
+                
+                // Rimuovi il mini scarafaggio dopo l'animazione
+                setTimeout(() => {
+                    if (miniBug.parentNode) {
+                        bugContainer.removeChild(miniBug);
+                    }
+                }, 3000 + delay);
+            }
+        }
+
+        // Aggiungi interattività al click sull'insetto
+        document.querySelector('.bug').addEventListener('click', function() {
+            // Animazione dell'insetto principale
+            this.style.animation = 'float 0.5s ease-in-out';
+            setTimeout(() => {
+                this.style.animation = 'float 3s ease-in-out infinite';
+            }, 500);
+            
+            // Crea i piccoli scarafaggi
+            createMiniBugs();
+        });
+
+        // Effetto di mouseover per far "salutare" l'insetto
+        document.querySelector('.bug').addEventListener('mouseenter', function() {
+            this.style.transform = 'scale(1.1)';
+        });
+
+        document.querySelector('.bug').addEventListener('mouseleave', function() {
+            this.style.transform = 'scale(1)';
+        });
+    </script>
+</body>
+</html>
